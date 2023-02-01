@@ -1,0 +1,64 @@
+name: Check for new Prometheus releases
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 0,4,8,12,16,20 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    name: Detect new releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo snap install yq
+
+      - id: latest-release
+        uses: pozetroninc/github-action-get-latest-release@v0.6.0
+        with:
+          repository: prometheus/prometheus
+          excludes: prerelease, draft
+
+      - name: Checkout the ROCK source
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - id: check
+        name: Check for new releases
+        shell: bash
+        run: |
+          release=$(yq '.parts.prometheus["source-tag"]' rockcraft.yaml)
+          if [ "${release}" != "${{steps.latest-release.outputs.release}}" ]; then
+            echo "release=${{steps.latest-release.outputs.release}}" >> $GITHUB_OUTPUT
+            echo "New upstream release ${{steps.latest-release.outputs.release}} found"
+          else
+            echo "No new upstream release found"
+          fi
+
+      - name: Update the version file and push a branch
+        if: ${{ steps.check.outputs.release != '' }}
+        shell: bash
+        run: |
+          full_version="${{steps.check.outputs.release}}"
+          version=${full_version#"prometheus-"} \
+          yq '.version = strenv(version) | .parts.prometheus["source-tag"] = "prometheus-" + strenv(version)' rockcraft.yaml > new.yaml
+          rm rockcraft.yaml
+          mv new.yaml rockcraft.yaml
+
+      - name: Create a PR
+        if: ${{ steps.check.outputs.release != '' }}
+        uses: peter-evans/create-pull-request@v4.2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(deps): bump prometheus version to ${{ steps.check.outputs.release }}"
+          committer: "Github Actions <github-actions@github.com>"
+          author: "Github Actions <github-actions@github.com>"
+          title: "Update to Prometheus ${{ steps.check.outputs.release }}"
+          body: Automated update to follow upstream [release](https://github.com/prometheus/prometheus/releases/tag/${{ steps.check.outputs.release }}) of Prometheus.
+          branch: "chore/bump-version-to-${{ steps.check.outputs.release }}"
+          delete-branch: true
