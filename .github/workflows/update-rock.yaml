@@ -9,6 +9,6 @@ jobs:
   build:
     uses: canonical/observability/.github/workflows/update-rock.yaml@main
     with:
-      rock-name: loki
+      rock-name: prometheus
       source-repo: prometheus/prometheus
       check-go: true
