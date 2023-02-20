@@ -7,4 +7,4 @@ jobs:
     name: Update Issues
     uses: canonical/observability/.github/workflows/issues.yaml@main
     with:
-      component: loki
+      component: prometheus

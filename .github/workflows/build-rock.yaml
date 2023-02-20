@@ -11,4 +11,4 @@ jobs:
     uses: canonical/observability/.github/workflows/build-rock.yaml@main
     secrets: inherit
     with:
-      rock-name: loki
+      rock-name: prometheus
