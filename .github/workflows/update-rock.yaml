@@ -1,0 +1,14 @@
+name: Update ROCK
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 0,4,8,12,16,20 * * *'
+
+jobs:
+  build:
+    uses: canonical/observability/.github/workflows/update-rock.yaml@main
+    with:
+      rock-name: loki
+      source-repo: grafana/loki
+      check-go: true
