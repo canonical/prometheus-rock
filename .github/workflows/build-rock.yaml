@@ -1,0 +1,14 @@
+name: Build ROCK
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: canonical/observability/.github/workflows/build-rock.yaml@main
+    secrets: inherit
+    with:
+      rock-name: prometheus
