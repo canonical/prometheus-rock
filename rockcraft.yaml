@@ -5,8 +5,12 @@ version: "2.43.0"
 base: ubuntu:22.04
 build-base: ubuntu:22.04
 license: Apache-2.0
-entrypoint: ["/bin/prometheus"]
-cmd: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus", "--web.console.libraries=/usr/share/prometheus/console_libraries", "--web.console.templates=/usr/share/prometheus/consoles"]
+
+services:
+  prometheus:
+    command: /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles
+    override: replace
+    startup: enabled
 platforms:
   amd64:
 parts:
@@ -17,6 +21,7 @@ parts:
     source-tag: "v2.43.0"
     build-snaps:
       - go/1.18/stable
+      - node/18/stable
     build-packages:
       - make
     override-build: |
