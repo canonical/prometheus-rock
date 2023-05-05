@@ -1,11 +1,10 @@
 name: prometheus
 summary: Prometheus in a ROCK.
 description: "Prometheus is time-series database for metrics collection and query, driven by either API or a web ui"
-version: "2.43.0"
+version: "2.43.1"
 base: ubuntu:22.04
 build-base: ubuntu:22.04
 license: Apache-2.0
-
 services:
   prometheus:
     command: /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles
@@ -18,10 +17,9 @@ parts:
     plugin: go
     source: https://github.com/prometheus/prometheus
     source-type: git
-    source-tag: "v2.43.0"
+    source-tag: "v2.43.1"
     build-snaps:
       - go/1.18/stable
-      - node/18/stable
     build-packages:
       - make
     override-build: |
