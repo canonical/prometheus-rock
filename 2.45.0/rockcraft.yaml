@@ -20,6 +20,7 @@ parts:
     source-tag: "v2.45.0"
     build-snaps:
       - go/1.19/stable
+      - node/17/stable
     build-packages:
       - make
     override-build: |
