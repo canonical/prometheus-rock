@@ -1,0 +1,18 @@
+name: Publish ROCK to GHCR with dev tag
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: canonical/observability/.github/workflows/rock-release-dev.yaml@main
+    secrets: inherit
+    with:
+      rock-name: prometheus
