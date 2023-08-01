@@ -18,6 +18,7 @@ jobs:
         #   $rockcraft_yaml: Path of the rockcraft.yaml to update
         #
         ## Node dependency
+        ls -la $application_src/web/ui
         node_version="$(sed -n 's|\"@types/node\":\s\"\(.*\)\",|\1|p' $application_src/web/ui/package.json)"
         echo $node_version
         node_version="${node_version##*^}"
