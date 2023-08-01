@@ -16,10 +16,7 @@ jobs:
         # The caller must provide $application_src and $rockcraft_yaml
         #   $application_src: The root folder of the cloned upstream project
         #   $rockcraft_yaml: Path of the rockcraft.yaml to update
-        if [[ -z "$application_src" || -z "$rockcraft_yaml"]]; then
-          echo "Remember to set the variables for application_src and rockcraft_yaml!"
-          exit 1;
-        fi
+        #
         ## Node dependency
         node_version=$(jq -r '.devDependencies."@types/node"' "$application_src"/web/ui/package.json | tr -d '^')
         yq -i 'del(.parts.prometheus.build-snaps.[] | select(. == "node/*"))' "$rockcraft_yaml"
