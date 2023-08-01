@@ -18,7 +18,7 @@ jobs:
         #   $rockcraft_yaml: Path of the rockcraft.yaml to update
         #
         ## Node dependency
+        chmod --recursive +r "$application_src"
         node_version=$(jq -r '.devDependencies."@types/node"' "$application_src"/web/ui/package.json | tr -d '^')
-        node_version="${node_version%%\.*}"
         yq -i 'del(.parts.prometheus.build-snaps.[] | select(. == "node/*"))' "$rockcraft_yaml"
-        ver="$node_version" yq -i '.parts.prometheus.build-snaps += "node/"+strenv(ver)+"/stable"' "$rockcraft_yaml"
+        ver="${node_version%%\.*}" yq -i '.parts.prometheus.build-snaps += "node/"+strenv(ver)+"/stable"' "$rockcraft_yaml"
