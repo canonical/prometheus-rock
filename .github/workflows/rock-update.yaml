@@ -19,6 +19,7 @@ jobs:
         #
         ## Node dependency
         node_version="$(cat $application_src/web/ui/package.json | sed -n 's|\"@types/node\":\s\"\(.*\)\",|\1|p')"
+        echo $(whoami)
         echo $node_version
         node_version="${node_version##*^}"
         node_version="${node_version%%\.*}"
