@@ -19,7 +19,7 @@ jobs:
         #
         ## Node dependency
         ls -la $application_src/web/ui
-        cat $application_scr/web/ui/package.json
+        cat $application_src/web/ui/package.json
         node_version="$(sed -n 's|\"@types/node\":\s\"\(.*\)\",|\1|p' $application_src/web/ui/package.json)"
         echo $node_version
         node_version="${node_version##*^}"
