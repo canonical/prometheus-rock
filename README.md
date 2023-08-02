@@ -6,7 +6,7 @@
 [ROCKs](https://canonical-rockcraft.readthedocs-hosted.com/en/latest/) for [Prometheus](https://prometheus.io/).  
 This repository holds all the necessary files to build ROCKs for the upstream versions we support. The Prometheus ROCK is used by the [prometheus-k8s-operator](https://github.com/canonical/prometheus-k8s-operator) charm.
 
-The ROCKs on this repository are built with [OCI Factory](https://github.com/canonical/oci-factory/), which also takes care of periodically rebuilding the images. We usually support our ROCKs for about six months from the release date.
+The ROCKs on this repository are built with [OCI Factory](https://github.com/canonical/oci-factory/), which also takes care of periodically rebuilding the images.
 
 Automation takes care of:
 * validating PRs, by simply trying to build the ROCK;
