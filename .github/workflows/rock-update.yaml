@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: canonical/observability/.github/workflows/rock-update.yaml@main
+    uses: canonical/observability/.github/workflows/rock-update.yaml@fix/rock-update-versions
     with:
       rock-name: prometheus
       source-repo: prometheus/prometheus
@@ -18,11 +18,11 @@ jobs:
         #   $rockcraft_yaml: Path of the rockcraft.yaml to update
         #
         ## Node dependency
-        node_version="$(cat $application_src/web/ui/package.json | sed -n 's|\"@types/node\":\s\"\(.*\)\",|\1|p')"
-        echo $(whoami)
-        echo $node_version
-        node_version="${node_version##*^}"
+        node_version=$(jq -r '.devDependencies."@types/node"' "$application_src"/web/ui/package.json | tr -d '^')
         node_version="${node_version%%\.*}"
+        # node_version="$(cat $application_src/web/ui/package.json | sed -n 's|\"@types/node\":\s\"\(.*\)\",|\1|p')"
+        # node_version="${node_version##*^}"
+        # node_version="${node_version%%\.*}"
         echo "Node Version: $node_version"
         yq -i 'del(.parts.prometheus.build-snaps.[] | select(. == "node/*"))' "$rockcraft_yaml"
         ver="$node_version" yq -i '.parts.prometheus.build-snaps += "node/"+strenv(ver)+"/stable"' "$rockcraft_yaml"
