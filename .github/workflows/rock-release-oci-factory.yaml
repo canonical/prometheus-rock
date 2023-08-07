@@ -1,0 +1,13 @@
+name: Open a PR to OCI Factory
+
+on:
+  workflow_dispatch: {} # TODO: Test to see if this works
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: canonical/observability/.github/workflows/rock-release-oci-factory.yaml@feature/release-oci-factory
+    with:
+      rock-name: prometheus
