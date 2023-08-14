@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: canonical/observability/.github/workflows/rock-release-oci-factory.yaml@feature/release-oci-factory
+    uses: canonical/observability/.github/workflows/rock-release-oci-factory.yaml@main
     secrets: inherit
     with:
       rock-name: prometheus
