@@ -44,3 +44,6 @@ parts:
       opt/prometheus/LICENSE: LICENSE
       opt/prometheus/NOTICE: NOTICE
       opt/prometheus/npm_licenses.tar.bz2: npm_licenses.tar.bz2
+  ca-certs:
+    plugin: nil
+    stage-packages: [ca-certificates]
