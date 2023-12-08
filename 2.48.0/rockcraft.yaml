@@ -1,7 +1,7 @@
 name: prometheus
 summary: Prometheus in a ROCK.
 description: "Prometheus is time-series database for metrics collection and query, driven by either API or a web ui"
-version: "2.46.0"
+version: "2.48.0"
 base: ubuntu:22.04
 build-base: ubuntu:22.04
 license: Apache-2.0
@@ -17,9 +17,9 @@ parts:
     plugin: go
     source: https://github.com/prometheus/prometheus
     source-type: git
-    source-tag: "v2.46.0"
+    source-tag: "v2.48.0"
     build-snaps:
-      - go/1.19/stable
+      - go/1.20/stable
       - node/17/stable
     build-packages:
       - make
