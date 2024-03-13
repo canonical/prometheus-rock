@@ -46,7 +46,7 @@ parts:
       opt/prometheus/npm_licenses.tar.bz2: npm_licenses.tar.bz2
   ca-certs:
     plugin: nil
-    stage-packages: [ca-certificates]
+    overlay-packages: [ca-certificates]
   deb-security-manifest:
     plugin: nil
     after:
