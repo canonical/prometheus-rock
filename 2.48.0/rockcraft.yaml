@@ -1,5 +1,5 @@
 name: prometheus
-summary: Prometheus in a ROCK.
+summary: Prometheus in a rock.
 description: "Prometheus is time-series database for metrics collection and query, driven by either API or a web ui"
 version: "2.48.0"
 base: ubuntu:22.04

@@ -1,4 +1,4 @@
-name: Update ROCK
+name: Update rock
 
 on:
   workflow_dispatch: {}

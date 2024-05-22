@@ -1,4 +1,4 @@
-name: "Publish ROCK to GHCR:dev"
+name: "Publish rock to GHCR:dev"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
