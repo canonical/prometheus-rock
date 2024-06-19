@@ -1,0 +1,58 @@
+name: prometheus
+summary: Prometheus in a rock.
+description: "Prometheus is time-series database for metrics collection and query, driven by either API or a web ui"
+version: "2.53.0"
+base: ubuntu:22.04
+build-base: ubuntu:22.04
+license: Apache-2.0
+services:
+  prometheus:
+    command: /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles
+    override: replace
+    startup: enabled
+platforms:
+  amd64:
+parts:
+  prometheus:
+    plugin: go
+    source: https://github.com/prometheus/prometheus
+    source-type: git
+    source-tag: "v2.53.0"
+    build-snaps:
+      - go/1.21/stable
+      - node/20/stable
+    build-packages:
+      - make
+    override-build: |
+      make build
+      install -D -m755 prometheus ${CRAFT_PART_INSTALL}/opt/prometheus/bin/prometheus
+      install -D -m755 promtool ${CRAFT_PART_INSTALL}/opt/prometheus/bin/promtool
+      install -D -m644 documentation/examples/prometheus.yml ${CRAFT_PART_INSTALL}/opt/prometheus/etc/prometheus/prometheus.yml
+      install -D -m644 LICENSE ${CRAFT_PART_INSTALL}/opt/prometheus/LICENSE
+      install -D -m644 NOTICE ${CRAFT_PART_INSTALL}/opt/prometheus/NOTICE
+      install -D -m644 npm_licenses.tar.bz2 ${CRAFT_PART_INSTALL}/opt/prometheus/npm_licenses.tar.bz2
+      mkdir -p ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/console_libraries
+      mkdir -p ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/consoles
+      cp -rp console_libraries/ ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/console_libraries
+      cp -rp consoles/ ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/consoles
+    organize:
+      opt/prometheus/bin/prometheus: usr/bin/prometheus
+      opt/prometheus/bin/promtool: usr/bin/promtool
+      opt/prometheus/etc/prometheus/prometheus.yml: etc/prometheus/prometheus.yml
+      opt/prometheus/usr/share/prometheus/console_libraries: usr/share/prometheus/console_libraries
+      opt/prometheus/usr/share/prometheus/consoles: usr/share/prometheus/consoles
+      opt/prometheus/LICENSE: LICENSE
+      opt/prometheus/NOTICE: NOTICE
+      opt/prometheus/npm_licenses.tar.bz2: npm_licenses.tar.bz2
+  ca-certs:
+    plugin: nil
+    overlay-packages: [ca-certificates]
+  deb-security-manifest:
+    plugin: nil
+    after:
+      - prometheus
+      - ca-certs
+    override-prime: |
+      set -x
+      mkdir -p $CRAFT_PRIME/usr/share/rocks/
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > $CRAFT_PRIME/usr/share/rocks/dpkg.query
