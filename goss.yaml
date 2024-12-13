@@ -1,0 +1,13 @@
+process:
+  prometheus:
+    running: true
+http:
+  config:
+    status: 200
+    url: http://localhost:9090/api/v1/status/config
+  buildinfo:
+    status: 200
+    url: http://localhost:9090/api/v1/status/buildinfo
+  targets :
+    status: 200
+    url: http://localhost:9090/api/v1/targets

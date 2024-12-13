@@ -2,8 +2,7 @@ name: prometheus
 summary: Prometheus in a rock.
 description: "Prometheus is time-series database for metrics collection and query, driven by either API or a web ui"
 version: "2.52.0"
-base: ubuntu:22.04
-build-base: ubuntu:22.04
+base: ubuntu@24.04
 license: Apache-2.0
 services:
   prometheus:

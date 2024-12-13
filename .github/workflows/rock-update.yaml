@@ -3,7 +3,7 @@ name: Update rock
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '0 0,4,8,12,16,20 * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   build:
@@ -21,3 +21,4 @@ jobs:
         node_version="\$(sed -En 's|\s*"@types/node":\s*"\^*([0-9]+)(\.[0-9])+.*",|\1|p' \$application_src/web/ui/package.json)"
         yq -i 'del(.parts.prometheus.build-snaps.[] | select(. == "node/*"))' "\$rockcraft_yaml"
         ver="\$node_version" yq -i '.parts.prometheus.build-snaps += "node/"+strenv(ver)+"/stable"' "\$rockcraft_yaml"
+    secrets: inherit
