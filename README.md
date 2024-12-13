@@ -9,6 +9,7 @@ This repository holds all the necessary files to build rocks for the upstream ve
 
 The rocks on this repository are built with [OCI Factory](https://github.com/canonical/oci-factory/), which also takes care of periodically rebuilding the images.
 
+**How do I interact with this repo?** This repo uses [`just`](https://github.com/casey/just) to easily run some commands:
 ```
 ∮ just
 Available recipes:
