@@ -12,5 +12,5 @@ on:
 jobs:
   pull-request:
     name: PR
-    uses: canonical/observability/.github/workflows/rock-pull-request.yaml@main
+    uses: canonical/observability/.github/workflows/rock-pull-request.yaml@v0
     secrets: inherit
