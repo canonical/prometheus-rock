@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    uses: canonical/observability/.github/workflows/rock-release-dev.yaml@main
+    uses: canonical/observability/.github/workflows/rock-release-dev.yaml@v0
     secrets: inherit
     with:
       rock-name: prometheus
