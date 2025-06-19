@@ -18,7 +18,7 @@ jobs:
         #   \$rockcraft_yaml: Path of the rockcraft.yaml to update
         #
         ## Node dependency
-        node_version="\$(sed -En 's|\s*"@types/node":\s*"\^*([0-9]+)(\.[0-9])+.*",|\1|p' \$application_src/web/ui/package.json)"
+        node_version="\$(grep -iE 'node(.js)?\s*>=\s*v?[0-9]+' \$application_src/web/ui/README.md | head -1 | grep -oE 'v?[0-9]+' | grep -oE '[0-9]+' | head -1)"
         yq -i 'del(.parts.prometheus.build-snaps.[] | select(. == "node/*"))' "\$rockcraft_yaml"
         ver="\$node_version" yq -i '.parts.prometheus.build-snaps += "node/"+strenv(ver)+"/stable"' "\$rockcraft_yaml"
     secrets: inherit
