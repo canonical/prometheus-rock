@@ -19,7 +19,7 @@ parts:
     source-tag: "v3.4.1"
     build-snaps:
       - go/1.23/stable
-      - node//stable
+      - node/22/stable
     build-packages:
       - make
     override-build: |
@@ -30,10 +30,6 @@ parts:
       install -D -m644 LICENSE ${CRAFT_PART_INSTALL}/opt/prometheus/LICENSE
       install -D -m644 NOTICE ${CRAFT_PART_INSTALL}/opt/prometheus/NOTICE
       install -D -m644 npm_licenses.tar.bz2 ${CRAFT_PART_INSTALL}/opt/prometheus/npm_licenses.tar.bz2
-      mkdir -p ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/console_libraries
-      mkdir -p ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/consoles
-      cp -rp console_libraries/ ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/console_libraries
-      cp -rp consoles/ ${CRAFT_PART_INSTALL}/opt/prometheus/usr/share/prometheus/consoles
     organize:
       opt/prometheus/bin/prometheus: usr/bin/prometheus
       opt/prometheus/bin/promtool: usr/bin/promtool
