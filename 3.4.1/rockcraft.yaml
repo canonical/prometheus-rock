@@ -19,7 +19,6 @@ parts:
     source-tag: "v3.4.1"
     build-snaps:
       - go/1.23/stable
-      - node/22/stable
     build-packages:
       - make
     override-build: |
