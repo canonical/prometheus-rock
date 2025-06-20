@@ -23,6 +23,7 @@ parts:
     build-packages:
       - make
     override-build: |
+      # Build Prometheus
       make build
       install -D -m755 prometheus ${CRAFT_PART_INSTALL}/opt/prometheus/bin/prometheus
       install -D -m755 promtool ${CRAFT_PART_INSTALL}/opt/prometheus/bin/promtool
