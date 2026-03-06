@@ -1,0 +1,17 @@
+name: "Publish rock to GHCR:dev"
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-dev:
+    name: Release to GHCR
+    uses: canonical/observability/.github/workflows/rock-release-dev.yaml@224c92a71bb24f4c67969c331c29b46876178a81
+    secrets: inherit

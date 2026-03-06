@@ -1,16 +1,16 @@
 name: Pull Requests
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   pull_request:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pull-request:
-    name: PR
-    uses: canonical/observability/.github/workflows/rock-pull-request.yaml@v0
+    name: Pull Requests
+    uses: canonical/observability/.github/workflows/rock-pull-request.yaml@224c92a71bb24f4c67969c331c29b46876178a81
     secrets: inherit

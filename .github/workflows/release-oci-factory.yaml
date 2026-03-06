@@ -1,0 +1,13 @@
+name: Open a PR to OCI Factory
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  release-oci-factory:
+    name: Release to OCI Factory
+    uses: canonical/observability/.github/workflows/rock-release-oci-factory.yaml@224c92a71bb24f4c67969c331c29b46876178a81
+    secrets: inherit

@@ -1,1 +1,14 @@
+# Ignore all spread.yaml files
+*/*/spread.yaml
+
+# Except the one in the top-level directory
+!/spread.yaml
+
+# Ignore copied goss.yaml files in component version directories
+*/*/goss.yaml
+
+# Ignore rocks
 *.rock
+
+# Ignore sboms
+*.sbom.json
