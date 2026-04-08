@@ -9,5 +9,5 @@ on:
 jobs:
   release-oci-factory:
     name: Release to OCI Factory
-    uses: canonical/observability/.github/workflows/rock-release-oci-factory.yaml@224c92a71bb24f4c67969c331c29b46876178a81
+    uses: canonical/observability/.github/workflows/rock-release-oci-factory.yaml@f3b465e651b8d8d40c82da8104689c3dcc90c8a0
     secrets: inherit
