@@ -11,6 +11,7 @@ services:
     startup: enabled
 platforms:
   amd64:
+run-user: _daemon_
 parts:
   prometheus:
     plugin: go
