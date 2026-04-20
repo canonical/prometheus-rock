@@ -12,5 +12,5 @@ concurrency:
 jobs:
   pull-request:
     name: Pull Requests
-    uses: canonical/observability/.github/workflows/rock-pull-request.yaml@224c92a71bb24f4c67969c331c29b46876178a81
+    uses: canonical/observability/.github/workflows/rock-pull-request.yaml@v2
     secrets: inherit

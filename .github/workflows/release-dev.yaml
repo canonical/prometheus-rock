@@ -13,5 +13,5 @@ concurrency:
 jobs:
   release-dev:
     name: Release to GHCR
-    uses: canonical/observability/.github/workflows/rock-release-dev.yaml@224c92a71bb24f4c67969c331c29b46876178a81
+    uses: canonical/observability/.github/workflows/rock-release-dev.yaml@v2
     secrets: inherit
