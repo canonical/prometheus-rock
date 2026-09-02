@@ -23,6 +23,10 @@ parts:
     build-packages:
       - make
     override-build: |
+      # Since v3.12 upstream's UI build switched from npm to pnpm, which
+      # isn't provisioned by the node snap. Enable it via corepack.
+      corepack enable
+      corepack prepare pnpm@latest --activate
       # Build Prometheus
       make build
       install -D -m755 prometheus ${CRAFT_PART_INSTALL}/opt/prometheus/bin/prometheus
