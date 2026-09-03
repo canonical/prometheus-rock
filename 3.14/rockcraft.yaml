@@ -33,7 +33,6 @@ parts:
       install -D -m644 documentation/examples/prometheus.yml ${CRAFT_PART_INSTALL}/opt/prometheus/etc/prometheus/prometheus.yml
       install -D -m644 LICENSE ${CRAFT_PART_INSTALL}/opt/prometheus/LICENSE
       install -D -m644 NOTICE ${CRAFT_PART_INSTALL}/opt/prometheus/NOTICE
-      install -D -m644 npm_licenses.tar.bz2 ${CRAFT_PART_INSTALL}/opt/prometheus/npm_licenses.tar.bz2
     organize:
       opt/prometheus/bin/prometheus: usr/bin/prometheus
       opt/prometheus/bin/promtool: usr/bin/promtool
@@ -42,7 +41,6 @@ parts:
       opt/prometheus/usr/share/prometheus/consoles: usr/share/prometheus/consoles
       opt/prometheus/LICENSE: LICENSE
       opt/prometheus/NOTICE: NOTICE
-      opt/prometheus/npm_licenses.tar.bz2: npm_licenses.tar.bz2
   ca-certs:
     plugin: nil
     overlay-packages: [ca-certificates]
