@@ -1,0 +1,41 @@
+command:
+  id -u: {exit-status: 0, stdout: ["584792"]}
+  id -g: {exit-status: 0, stdout: ["584792"]}
+  # the service Pebble started, not only `docker exec`, runs as 584792 (/proc/<pid> is owned by the process uid)
+  prometheus process uid:
+    exec: sh -c 'test "$(for p in /proc/[0-9]*; do [ "$(cat $p/comm 2>/dev/null)" = prometheus ] && stat -c %u $p; done | sort -u)" = 584792'
+    exit-status: 0
+  # write access, not just mode bits, on every path the charm pushes to or the rock writes
+  write /etc/prometheus:
+    exec: sh -c 'touch /etc/prometheus/.w && rm /etc/prometheus/.w'
+    exit-status: 0
+  write /etc/prometheus/rules (charm make_dirs + remove_path):
+    exec: sh -c 'mkdir -p /etc/prometheus/rules && touch /etc/prometheus/rules/.w && rm -r /etc/prometheus/rules'
+    exit-status: 0
+  overwrite /etc/prometheus/prometheus.yml:
+    exec: sh -c 'cat /etc/prometheus/prometheus.yml > /etc/prometheus/prometheus.yml'
+    exit-status: 0
+  write /usr/local/share/ca-certificates:
+    exec: sh -c 'mkdir -p /usr/local/share/ca-certificates/juju_receive-ca-cert && touch /usr/local/share/ca-certificates/ca.crt && rm -r /usr/local/share/ca-certificates/ca.crt /usr/local/share/ca-certificates/juju_receive-ca-cert'
+    exit-status: 0
+  write /prometheus:
+    exec: sh -c 'touch /prometheus/.w && rm /prometheus/.w'
+    exit-status: 0
+  write /var/lib/prometheus:
+    exec: sh -c 'touch /var/lib/prometheus/.w && rm /var/lib/prometheus/.w'
+    exit-status: 0
+  # the charm execs this in the workload after pushing CAs
+  update-ca-certificates:
+    exec: sh -c 'update-ca-certificates --fresh'
+    exit-status: 0
+file:
+  /etc/prometheus: {exists: true, filetype: directory, owner: _daemon_, group: _daemon_, mode: "0750"}
+  /usr/local/share/ca-certificates: {exists: true, filetype: directory, owner: _daemon_, group: _daemon_, mode: "0750"}
+  /etc/ssl/certs: {exists: true, filetype: directory, owner: _daemon_, group: _daemon_, mode: "0750"}
+  /prometheus: {exists: true, filetype: directory, owner: _daemon_, group: _daemon_, mode: "0750"}
+  /var/lib/prometheus: {exists: true, filetype: directory, owner: _daemon_, group: _daemon_, mode: "0750"}
+  # binaries stay root-owned, proving the chown was scoped
+  /usr/bin/prometheus: {exists: true, owner: root, group: root, mode: "0755"}
+  /usr/bin/promtool: {exists: true, owner: root, group: root, mode: "0755"}
+process:
+  prometheus: {running: true}

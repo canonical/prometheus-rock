@@ -1,0 +1,72 @@
+name: prometheus
+summary: Prometheus in a rock.
+description: "Prometheus is time-series database for metrics collection and query, driven by either API or a web ui"
+version: "3.16.0"
+base: ubuntu@26.04
+license: Apache-2.0
+run_user: _daemon_
+services:
+  prometheus:
+    command: /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles
+    override: replace
+    startup: enabled
+platforms:
+  amd64:
+parts:
+  prometheus:
+    plugin: go
+    source: https://github.com/prometheus/prometheus
+    source-type: git
+    source-tag: "v3.16.0"
+    build-snaps:
+      - go/1.26/candidate
+      - node/24/stable
+    build-packages:
+      - make
+    override-build: |
+      # Since v3.12 upstream's UI build switched from npm to pnpm, which
+      # isn't provisioned by the node snap.
+      npm install -g pnpm
+      # Build Prometheus
+      make build
+      install -D -m755 prometheus ${CRAFT_PART_INSTALL}/opt/prometheus/bin/prometheus
+      install -D -m755 promtool ${CRAFT_PART_INSTALL}/opt/prometheus/bin/promtool
+      install -D -m644 documentation/examples/prometheus.yml ${CRAFT_PART_INSTALL}/opt/prometheus/etc/prometheus/prometheus.yml
+      install -D -m644 LICENSE ${CRAFT_PART_INSTALL}/opt/prometheus/LICENSE
+      install -D -m644 NOTICE ${CRAFT_PART_INSTALL}/opt/prometheus/NOTICE
+    organize:
+      opt/prometheus/bin/prometheus: usr/bin/prometheus
+      opt/prometheus/bin/promtool: usr/bin/promtool
+      opt/prometheus/etc/prometheus/prometheus.yml: etc/prometheus/prometheus.yml
+      opt/prometheus/usr/share/prometheus/console_libraries: usr/share/prometheus/console_libraries
+      opt/prometheus/usr/share/prometheus/consoles: usr/share/prometheus/consoles
+      opt/prometheus/LICENSE: LICENSE
+      opt/prometheus/NOTICE: NOTICE
+  ca-certs:
+    plugin: nil
+    overlay-packages: [ca-certificates]
+  user-setup:
+    plugin: nil
+    after: [prometheus, ca-certs]
+    override-prime: |
+      craftctl default
+      # Shared non-root identity for snaps and rocks:
+      # https://discourse.ubuntu.com/t/unifying-user-identity-across-snaps-and-rocks/36469
+      DAEMON_UID=584792
+      DAEMON_GID=584792
+      # Paths the charm writes through Pebble, plus the rock's own default data dir
+      for dir in etc/prometheus usr/local/share/ca-certificates etc/ssl/certs prometheus var/lib/prometheus; do
+        mkdir -p "$dir"
+        chown -R "${DAEMON_UID}:${DAEMON_GID}" "$dir"
+        chmod 750 "$dir"
+      done
+  deb-security-manifest:
+    plugin: nil
+    after:
+      - prometheus
+      - ca-certs
+      - user-setup
+    override-prime: |
+      set -x
+      mkdir -p $CRAFT_PRIME/usr/share/rocks/
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > $CRAFT_PRIME/usr/share/rocks/dpkg.query

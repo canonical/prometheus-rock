@@ -1,0 +1,4 @@
+summary: Run as _daemon_ with access to the paths the charm uses
+
+execute: |
+  dgoss run rockcraft-test:latest
